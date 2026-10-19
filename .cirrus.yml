@@ -1,0 +1,12 @@
+task:
+  container:
+    image: cirrusci/flutter:stable
+    cpu: 4
+    memory: 12G
+  pub_cache:
+    folder: ~/.pub-cache
+  build_script:
+    - flutter pub get
+    - flutter build apk --release
+  apk_artifacts:
+    path: build/app/outputs/flutter-apk/app-release.apk
