@@ -1,0 +1,91 @@
+openapi: 3.1.0
+info:
+  title: AI Floating Assistant — Skill Trigger API (PWA)
+  version: 1.0.0
+  description: >
+    Standardized OpenAPI specification for the PWA dashboard. Connect your
+    ChatGPT Custom GPT / external AI agent directly via Custom Actions to
+    list and trigger saved skills on the user's Android device (delivered
+    via FCM push or mybot:// deep link).
+
+servers:
+  - url: https://your-pwa-domain.example.com/api
+    description: Replace with your deployed PWA host
+
+paths:
+  /skills:
+    get:
+      summary: List saved skills (recorded macros)
+      operationId: listSkills
+      responses:
+        '200':
+          description: Skill catalog with GEO/AEO metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  skills:
+                    type: array
+                    items: { $ref: '#/components/schemas/Skill' }
+
+  /skills/{id}/run:
+    post:
+      summary: Trigger a saved skill on the user's device
+      description: >
+        Sends an FCM push to the registered device; the app replays the
+        skill via its Accessibility automation engine. Also returns a
+        mybot:// deep link the user's phone can handle natively.
+      operationId: runSkill
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RunOptions' }
+      responses:
+        '202':
+          description: Skill dispatch accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dispatched: { type: boolean }
+                  deepLink: { type: string, example: 'mybot://run?skill=skill_123' }
+
+  /webhook/trigger:
+    post:
+      summary: Generic webhook receiver for external AI agents
+      description: Accepts trigger payloads from Make/Zapier/Custom GPTs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RunOptions' }
+      responses:
+        '202': { description: Accepted }
+
+components:
+  schemas:
+    Skill:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        geo_schema:
+          type: object
+          description: Embedded JSON-LD HowTo metadata for answer engines
+        created_at: { type: string, format: date-time }
+
+    RunOptions:
+      type: object
+      properties:
+        skillId: { type: string }
+        prompt: { type: string, description: Ad-hoc prompt instead of a saved skill }
+        deviceToken: { type: string, description: FCM token of the target device }

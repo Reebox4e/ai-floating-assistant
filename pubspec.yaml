@@ -1,0 +1,57 @@
+name: ai_floating_assistant
+description: "Local-first AI Floating Assistant for Android — BYOK engine, encrypted storage, automation skills."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ── State / DI ────────────────────────────────────────────────
+  provider: ^6.1.2
+
+  # ── Native bridges ────────────────────────────────────────────
+  # (Overlay, Accessibility, NotificationListener live in /android as Kotlin)
+
+  # ── Local-first encrypted DB (AES-256 via SQLCipher) ──────────
+  sqflite_sqlcipher: ^3.1.0
+  path_provider: ^2.1.3
+  path: ^1.9.0
+
+  # ── Key vault for master DB key + provider API keys ───────────
+  flutter_secure_storage: ^9.2.2
+  crypto: ^3.0.3
+
+  # ── BYOK networking + SSE streaming ───────────────────────────
+  dio: ^5.4.3+1
+
+  # ── Deep links (mybot://) & webhooks ──────────────────────────
+  app_links: ^3.5.0
+
+  # ── Background schedules ──────────────────────────────────────
+  workmanager: ^0.5.2
+
+  # ── Firebase: Auth licensing + FCM triggers ONLY (no cloud data on free) ──
+  firebase_core: ^2.31.0
+  firebase_auth: ^4.19.5
+  firebase_messaging: ^14.9.3
+
+  # ── PWA support (flutter build web) ───────────────────────────
+  url_strategy: ^1.0.1
+
+  # ── E2E encrypted cloud sync (Pro, optional) ──────────────────
+  # Use Firebase Functions + user-derived AES key; never store the key server-side.
+  encrypt: ^5.0.3
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/openapi.yaml
