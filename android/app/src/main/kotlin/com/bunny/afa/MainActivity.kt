@@ -4,9 +4,10 @@ import android.content.Intent
 import android.os.Build
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import com.bunny.afa.overlay.FloatingOverlayService
 import io.flutter.plugin.common.MethodChannel
-import accessibility.AssistantAccessibilityService
-import notifications.NotificationReceiverService
+import com.bunny.afa.accessibility.AssistantAccessibilityService
+import com.bunny.afa.notifications.NotificationReceiverService
 
 /**
  * Main entry. Registers all native bridges:
@@ -31,11 +32,11 @@ class MainActivity : FlutterActivity() {
         MethodChannel(messenger, CHANNEL_CONTROL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "showBubble" -> {
-                    startService(Intent(this, overlay.FloatingOverlayService::class.java))
+                    startService(Intent(this, FloatingOverlayService::class.java))
                     result.success(true)
                 }
                 "hideBubble" -> {
-                    stopService(Intent(this, overlay.FloatingOverlayService::class.java))
+                    stopService(Intent(this, FloatingOverlayService::class.java))
                     result.success(true)
                 }
                 "canDrawOverlays" ->

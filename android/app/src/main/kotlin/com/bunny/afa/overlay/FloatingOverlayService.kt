@@ -14,7 +14,6 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import io.flutter.FlutterEngineGroup
 import io.flutter.embedding.android.FlutterView
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -171,7 +170,8 @@ class FloatingOverlayService : Service() {
         if (engine == null) {
             val appBundlePath = io.flutter.FlutterInjector.instance()
                 .flutterLoader().findAppBundlePath()
-            engine = FlutterEngineGroup(this).createAndRunEngine(
+            engine = FlutterEngine(this)
+            engine!!.dartExecutor.executeDartEntrypoint(
                 DartExecutor.DartEntrypoint(appBundlePath, OVERLAY_ENTRYPOINT)
             )
             methodChannel = MethodChannel(engine!!.dartExecutor.binaryMessenger, CHANNEL_FLUTTER)
