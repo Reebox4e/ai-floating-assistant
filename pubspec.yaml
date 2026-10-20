@@ -40,7 +40,6 @@ dependencies:
   firebase_messaging: ^14.9.3
 
   # ── PWA support (flutter build web) ───────────────────────────
-  url_strategy: ^1.0.1
 
   # ── E2E encrypted cloud sync (Pro, optional) ──────────────────
   # Use Firebase Functions + user-derived AES key; never store the key server-side.
